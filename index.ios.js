@@ -85,42 +85,47 @@ var BusFollower = React.createClass({
     };
     fetch(ALL_ROUTES_URL, params)
       .then((response) => response.json())
-      .then((responseData) => {
-        var routes = responseData.GetRouteSummaryForStopResult.Routes.Route;
-        var annotations = [];
-        var list = [];
-        for (var i = 0; i < routes.length; i++) {
-          if (routes[i].Trips) {
-            var trips = routes[i].Trips;
-            var routeNo = routes[i].RouteNo;
-            for (var j = 0; j < trips.length; j++) {
-              var trip = trips[j];
-              if (trip.Latitude) {
-                annotations.push({
-                  latitude: parseFloat(trip.Latitude),
-                  longitude: parseFloat(trip.Longitude),
-                  title: 'Route ' + routeNo + ' \u2014 ' + trip.AdjustedScheduleTime + ' min.',
-                  subtitle: trip.TripDestination,
-                });
-              }
-              list.push({
-                routeNo: routeNo,
-                mins: parseInt(trip.AdjustedScheduleTime),
-                dest: trip.TripDestination,
-              })
-            }
-          }
-        }
-        list.sort(function (a, b) {
-          return a.mins - b.mins;
-        });
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.setState({
-          annotations: annotations,
-          busData: ds.cloneWithRows(list),
-        });
-      })
+      .then((responseData) => this.parseTrips(responseData))
       .done();
+  },
+
+  parseTrips: function(responseData) {
+    var routes = responseData.GetRouteSummaryForStopResult.Routes.Route;
+    var annotations = [];
+    var list = [];
+
+    for (var i = 0; i < routes.length; i++) {
+      if (routes[i].Trips) {
+        var trips = routes[i].Trips;
+        var routeNo = routes[i].RouteNo;
+        for (var j = 0; j < trips.length; j++) {
+          var trip = trips[j];
+          if (trip.Latitude) {
+            annotations.push({
+              latitude: parseFloat(trip.Latitude),
+              longitude: parseFloat(trip.Longitude),
+              title: 'Route ' + routeNo + ' \u2014 ' + trip.AdjustedScheduleTime + ' min.',
+              subtitle: trip.TripDestination,
+            });
+          }
+          list.push({
+            routeNo: routeNo,
+            mins: parseInt(trip.AdjustedScheduleTime),
+            dest: trip.TripDestination,
+          })
+        }
+      }
+    }
+
+    list.sort(function (a, b) {
+      return a.mins - b.mins;
+    });
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+    this.setState({
+      annotations: annotations,
+      busData: ds.cloneWithRows(list),
+    });
   },
 });
 

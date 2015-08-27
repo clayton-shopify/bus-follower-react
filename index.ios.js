@@ -15,8 +15,8 @@ var {
   View,
 } = React;
 
-var appID = '1d5a86db';
-var apiKey = '336c4052a44a741a4b0344060ef73b12';
+var APP_ID = '1d5a86db';
+var API_KEY = '336c4052a44a741a4b0344060ef73b12';
 
 var ALL_ROUTES_URL = 'https://api.octranspo1.com/v1.2/GetNextTripsForStopAllRoutes'
 
@@ -54,8 +54,8 @@ var BusFollower = React.createClass({
     var params = {
       method: 'POST',
       body: queryString.stringify({
-        appID: appID,
-        apiKey: apiKey,
+        appID: APP_ID,
+        apiKey: API_KEY,
         stopNo: '3001',
         format: 'json',
       }),

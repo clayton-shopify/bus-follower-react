@@ -48,7 +48,13 @@ var BusFollower = React.createClass({
         <ListView
           style={styles.list}
           dataSource={this.state.busData}
-          renderRow={(rowData) => <Text>Route {rowData.routeNo}: {rowData.mins} minutes</Text>}
+          renderRow={(rowData) =>
+            <View style={styles.listitem}>
+              <Text style={styles.route}>Route {rowData.routeNo}</Text>
+              <Text style={styles.dest}>{rowData.dest}</Text>
+              <Text style={styles.mins}>{rowData.mins} min.</Text>
+            </View>
+          }
         />
       </View>
     );
@@ -87,7 +93,11 @@ var BusFollower = React.createClass({
                   title: routeNo,
                 });
               }
-              list.push({routeNo: routeNo, mins: parseInt(trip.AdjustedScheduleTime)})
+              list.push({
+                routeNo: routeNo,
+                mins: parseInt(trip.AdjustedScheduleTime),
+                dest: trip.TripDestination,
+              })
             }
           }
         }
@@ -116,6 +126,19 @@ var styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+  },
+  listitem: {
+    flexDirection: 'row',
+  },
+  route: {
+    flex: 25,
+  },
+  dest: {
+    flex: 80,
+  },
+  mins: {
+    flex: 20,
+    textAlign: 'right',
   },
 });
 

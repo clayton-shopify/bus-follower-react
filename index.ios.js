@@ -5,6 +5,8 @@
 'use strict';
 
 var React = require('react-native');
+var queryString = require('query-string');
+
 var {
   AppRegistry,
   MapView,
@@ -51,7 +53,12 @@ var BusFollower = React.createClass({
   fetchData: function() {
     var params = {
       method: 'POST',
-      body: 'appID=' + appID + '&apiKey=' + apiKey + '&stopNo=' + '3001' + '&format=json',
+      body: queryString.stringify({
+        appID: appID,
+        apiKey: apiKey,
+        stopNo: '3001',
+        format: 'json',
+      }),
     };
     fetch(ALL_ROUTES_URL, params)
       .then((response) => response.json())

@@ -7,25 +7,27 @@
 var React = require('react-native');
 var {
   AppRegistry,
+  MapView,
   StyleSheet,
   Text,
   View,
 } = React;
 
+var region = {
+  latitude: 45.420591,
+  longitude: -75.692859,
+  latitudeDelta: 0.02,
+  longitudeDelta: 0.02,
+};
+
 var BusFollower = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <MapView
+          style={styles.map}
+          region={region}
+        />
       </View>
     );
   }
@@ -38,15 +40,12 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
+  map: {
+    height: 600,
+    width: 350,
     margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    borderWidth: 1,
+    borderColor: '#000000',
   },
 });
 

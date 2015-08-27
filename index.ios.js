@@ -9,6 +9,7 @@ var queryString = require('query-string');
 
 var {
   AppRegistry,
+  ListView,
   MapView,
   StyleSheet,
   Text,
@@ -29,8 +30,10 @@ var region = {
 
 var BusFollower = React.createClass({
   getInitialState: function() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       annotations: null,
+      busData: ds.cloneWithRows(['Test 1', 'Test 2']),
     }
   },
 
@@ -41,6 +44,11 @@ var BusFollower = React.createClass({
           style={styles.map}
           region={region}
           annotations={this.state.annotations}
+        />
+        <ListView
+          style={styles.list}
+          dataSource={this.state.busData}
+          renderRow={(rowData) => <Text>{rowData}</Text>}
         />
       </View>
     );
@@ -97,6 +105,9 @@ var styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   map: {
+    flex: 2,
+  },
+  list: {
     flex: 1,
   },
 });

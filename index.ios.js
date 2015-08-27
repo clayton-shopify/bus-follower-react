@@ -90,7 +90,8 @@ var BusFollower = React.createClass({
                 annotations.push({
                   latitude: parseFloat(trip.Latitude),
                   longitude: parseFloat(trip.Longitude),
-                  title: routeNo,
+                  title: 'Route ' + routeNo + ' \u2014 ' + trip.AdjustedScheduleTime + ' min.',
+                  subtitle: trip.TripDestination,
                 });
               }
               list.push({

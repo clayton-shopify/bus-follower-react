@@ -48,8 +48,8 @@ var BusFollower = React.createClass({
         <ListView
           style={styles.list}
           dataSource={this.state.busData}
-          renderRow={(rowData) =>
-            <View style={styles.listitem}>
+          renderRow={(rowData, sectionID, rowID, highlightRow) =>
+            <View style={rowID % 2 == 0 ? styles.listitem1 : styles.listitem2}>
               <Text style={styles.route}>Route {rowData.routeNo}</Text>
               <Text style={styles.dest}>{rowData.dest}</Text>
               <Text style={styles.mins}>{rowData.mins} min.</Text>
@@ -142,8 +142,15 @@ var styles = StyleSheet.create({
   list: {
     flex: 1,
   },
-  listitem: {
+  listitem1: {
     flexDirection: 'row',
+    padding: 2,
+    backgroundColor: '#EEEEFF',
+  },
+  listitem2: {
+    flexDirection: 'row',
+    padding: 2,
+    backgroundColor: '#FFFFFF',
   },
   route: {
     flex: 25,

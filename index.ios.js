@@ -33,7 +33,7 @@ var BusFollower = React.createClass({
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       annotations: null,
-      busData: ds.cloneWithRows(['Test 1', 'Test 2']),
+      busData: ds.cloneWithRows([]),
     }
   },
 
@@ -48,7 +48,7 @@ var BusFollower = React.createClass({
         <ListView
           style={styles.list}
           dataSource={this.state.busData}
-          renderRow={(rowData) => <Text>{rowData}</Text>}
+          renderRow={(rowData) => <Text>Route {rowData.routeNo}: {rowData.mins} minutes</Text>}
         />
       </View>
     );
@@ -73,6 +73,7 @@ var BusFollower = React.createClass({
       .then((responseData) => {
         var routes = responseData.GetRouteSummaryForStopResult.Routes.Route;
         var annotations = [];
+        var list = [];
         for (var i = 0; i < routes.length; i++) {
           if (routes[i].Trips) {
             var trips = routes[i].Trips;
@@ -86,11 +87,17 @@ var BusFollower = React.createClass({
                   title: routeNo,
                 });
               }
+              list.push({routeNo: routeNo, mins: parseInt(trip.AdjustedScheduleTime)})
             }
           }
         }
+        list.sort(function (a, b) {
+          return a.mins - b.mins;
+        });
+        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({
           annotations: annotations,
+          busData: ds.cloneWithRows(list),
         });
       })
       .done();

@@ -93,15 +93,11 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
     backgroundColor: '#F5FCFF',
   },
   map: {
-    height: 600,
-    width: 350,
-    margin: 10,
-    borderWidth: 1,
-    borderColor: '#000000',
+    flex: 1,
   },
 });
 

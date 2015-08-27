@@ -24,8 +24,8 @@ var ALL_ROUTES_URL = 'https://api.octranspo1.com/v1.2/GetNextTripsForStopAllRout
 var region = {
   latitude: 45.420591,
   longitude: -75.692859,
-  latitudeDelta: 0.1,
-  longitudeDelta: 0.1,
+  latitudeDelta: 0.05,
+  longitudeDelta: 0.05,
 };
 
 var BusFollower = React.createClass({

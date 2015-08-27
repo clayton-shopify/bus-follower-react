@@ -60,8 +60,17 @@ var BusFollower = React.createClass({
     );
   },
 
+  tick: function() {
+    this.fetchData();
+  },
+
   componentDidMount: function() {
     this.fetchData();
+    this.interval = setInterval(this.tick, 30000);
+  },
+
+  componentWillUnmount: function() {
+    clearInterval(this.interval);
   },
 
   fetchData: function() {

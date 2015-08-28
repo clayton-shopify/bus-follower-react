@@ -7,6 +7,7 @@ var {
   AppRegistry,
   ListView,
   MapView,
+  StatusBarIOS,
   StyleSheet,
   Text,
   TextInput,
@@ -80,6 +81,7 @@ var BusFollower = React.createClass({
   },
 
   componentDidMount: function() {
+    StatusBarIOS.setHidden(true)
     this.fetchData();
     this.interval = setInterval(this.tick, 30000);
   },

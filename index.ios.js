@@ -2,6 +2,7 @@
 
 var React = require('react-native');
 var queryString = require('query-string');
+var SQLite = require('react-native-sqlite');
 
 var {
   AppRegistry,
@@ -26,11 +27,14 @@ var region = {
   longitudeDelta: 0.05,
 };
 
+var stopDB = SQLite.open('stops.sqlite');
+
 var BusFollower = React.createClass({
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       text: DEFAULT_STOP,
+      region: region,
       stopNum: DEFAULT_STOP,
       annotations: null,
       busData: ds.cloneWithRows([]),
@@ -42,7 +46,7 @@ var BusFollower = React.createClass({
       <View style={styles.container}>
         <MapView
           style={styles.map}
-          region={region}
+          region={this.state.region}
           annotations={this.state.annotations}
         />
         <View style={{flexDirection: 'row'}}>
@@ -54,7 +58,7 @@ var BusFollower = React.createClass({
             onEndEditing={(event) => {
               var text = event.nativeEvent.text;
               if (text.length == 4) {
-                this.state.stopNum = text;
+                this.setStopNum(text);
                 this.fetchData();
               }
             }}
@@ -106,8 +110,29 @@ var BusFollower = React.createClass({
       .done();
   },
 
+  setStopNum: function(stopNum) {
+    this.state.stopNum = stopNum;
+
+    stopDB.executeSQL(
+      'SELECT stop_lat, stop_lon FROM stops WHERE stop_code=? LIMIT 1',
+      [stopNum],
+      (row) => {
+        var region = {
+          latitude: row.stop_lat / 1000000,
+          longitude: row.stop_lon / 1000000,
+        };
+        this.state.region = region;
+      },
+      (error) => {
+        if (error) {
+          throw error;
+        }
+      },
+    );
+  },
+
   parseTrips: function(responseData) {
-    var result = responseData.GetRouteSummaryForStopResult
+    var result = responseData.GetRouteSummaryForStopResult;
     var annotations = [];
     var list = [];
 

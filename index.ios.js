@@ -105,36 +105,40 @@ var BusFollower = React.createClass({
   },
 
   parseTrips: function(responseData) {
-    var routes = responseData.GetRouteSummaryForStopResult.Routes.Route;
+    var result = responseData.GetRouteSummaryForStopResult
     var annotations = [];
     var list = [];
 
-    for (var i = 0; i < routes.length; i++) {
-      if (routes[i].Trips) {
-        var trips = routes[i].Trips;
-        var routeNo = routes[i].RouteNo;
-        for (var j = 0; j < trips.length; j++) {
-          var trip = trips[j];
-          if (trip.Latitude) {
-            annotations.push({
-              latitude: parseFloat(trip.Latitude),
-              longitude: parseFloat(trip.Longitude),
-              title: 'Route ' + routeNo + ' \u2014 ' + trip.AdjustedScheduleTime + ' min.',
-              subtitle: trip.TripDestination,
-            });
+    if (!result.Error) {
+      var routes = result.Routes.Route;
+
+      for (var i = 0; i < routes.length; i++) {
+        if (routes[i].Trips) {
+          var trips = routes[i].Trips;
+          var routeNo = routes[i].RouteNo;
+          for (var j = 0; j < trips.length; j++) {
+            var trip = trips[j];
+            if (trip.Latitude) {
+              annotations.push({
+                latitude: parseFloat(trip.Latitude),
+                longitude: parseFloat(trip.Longitude),
+                title: 'Route ' + routeNo + ' \u2014 ' + trip.AdjustedScheduleTime + ' min.',
+                subtitle: trip.TripDestination,
+              });
+            }
+            list.push({
+              routeNo: routeNo,
+              mins: parseInt(trip.AdjustedScheduleTime),
+              dest: trip.TripDestination,
+            })
           }
-          list.push({
-            routeNo: routeNo,
-            mins: parseInt(trip.AdjustedScheduleTime),
-            dest: trip.TripDestination,
-          })
         }
       }
-    }
 
-    list.sort(function (a, b) {
-      return a.mins - b.mins;
-    });
+      list.sort(function (a, b) {
+        return a.mins - b.mins;
+      });
+    }
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.setState({

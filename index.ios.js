@@ -114,10 +114,16 @@ var BusFollower = React.createClass({
 
     if (!result.Error) {
       var routes = result.Routes.Route;
+      if (!(routes.constructor === Array)) {
+        routes = [routes];
+      }
 
       for (var i = 0; i < routes.length; i++) {
         if (routes[i].Trips) {
           var trips = routes[i].Trips;
+          if (trips.Trip) {
+            trips = trips.Trip;
+          }
           var routeNo = routes[i].RouteNo;
           for (var j = 0; j < trips.length; j++) {
             var trip = trips[j];

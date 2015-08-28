@@ -36,6 +36,7 @@ var BusFollower = React.createClass({
       text: DEFAULT_STOP,
       region: region,
       stopNum: DEFAULT_STOP,
+      stopCoords: null,
       annotations: null,
       busData: ds.cloneWithRows([]),
     }
@@ -85,6 +86,7 @@ var BusFollower = React.createClass({
   },
 
   componentDidMount: function() {
+    this.setStopNum(DEFAULT_STOP);
     this.fetchData();
     this.interval = setInterval(this.tick, 30000);
   },
@@ -114,12 +116,17 @@ var BusFollower = React.createClass({
     this.state.stopNum = stopNum;
 
     stopDB.executeSQL(
-      'SELECT stop_lat, stop_lon FROM stops WHERE stop_code=? LIMIT 1',
+      'SELECT stop_lat, stop_lon, stop_name FROM stops WHERE stop_code=? LIMIT 1',
       [stopNum],
       (row) => {
         this.state.region = {
           latitude: row.stop_lat / 1000000,
           longitude: row.stop_lon / 1000000,
+        };
+        this.state.stopCoords = {
+          latitude: row.stop_lat / 1000000,
+          longitude: row.stop_lon / 1000000,
+          name: row.stop_name,
         };
       },
       (error) => {
@@ -136,6 +143,13 @@ var BusFollower = React.createClass({
     var list = [];
 
     if (!result.Error) {
+      annotations.push({
+        latitude: this.state.stopCoords.latitude,
+        longitude: this.state.stopCoords.longitude,
+        title: 'Stop ' + this.state.stopNum,
+        subtitle: this.state.stopCoords.name,
+      });
+
       var routes = result.Routes.Route;
       if (!(routes.constructor === Array)) {
         routes = [routes];

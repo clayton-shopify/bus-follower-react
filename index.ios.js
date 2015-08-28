@@ -117,11 +117,10 @@ var BusFollower = React.createClass({
       'SELECT stop_lat, stop_lon FROM stops WHERE stop_code=? LIMIT 1',
       [stopNum],
       (row) => {
-        var region = {
+        this.state.region = {
           latitude: row.stop_lat / 1000000,
           longitude: row.stop_lon / 1000000,
         };
-        this.state.region = region;
       },
       (error) => {
         if (error) {

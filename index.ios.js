@@ -46,7 +46,7 @@ var BusFollower = React.createClass({
           annotations={this.state.annotations}
         />
         <View style={{flexDirection: 'row'}}>
-          <Text style={{flex: 0}}>Stop number:</Text>
+          <Text style={styles.stopnumlabel}>Stop:</Text>
           <TextInput
             style={styles.stopnum}
             value={this.state.text}
@@ -166,10 +166,17 @@ var styles = StyleSheet.create({
   map: {
     flex: 2,
   },
+  stopnumlabel: {
+    fontSize: 20,
+    marginLeft: 5,
+    marginRight: 5,
+  },
   stopnum: {
     flex: 1,
     borderWidth: 1,
-    marginLeft: 5,
+    fontSize: 20,
+    padding: 5,
+    height: 25,
   },
   list: {
     flex: 1,

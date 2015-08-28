@@ -103,6 +103,7 @@ var BusFollower = React.createClass({
     fetch(ALL_ROUTES_URL, params)
       .then((response) => response.json())
       .then((responseData) => this.parseTrips(responseData))
+      .catch((error) => {})
       .done();
   },
 
